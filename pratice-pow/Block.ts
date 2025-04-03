@@ -3,12 +3,12 @@ import crypto from "crypto";
 class Block {
   index: number;
   timestamp: number;
-  data: string;
+  data: any;
   previousHash: string;
   hash: string;
   nonce: number = 0;
   
-  constructor(index: number, timestamp: number, data: string, previousHash: string) {
+  constructor(index: number, timestamp: number, data: any, previousHash: string) {
     this.index = index;
     this.timestamp = timestamp;
     this.data = data;
@@ -19,7 +19,7 @@ class Block {
   calculateHash(): string {
     return crypto
       .createHash("sha256")
-      .update(this.index + this.timestamp + this.data + this.previousHash)
+      .update(this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce)
       .digest("hex");
   }
 
@@ -28,9 +28,8 @@ class Block {
       this.nonce++;
       this.hash = this.calculateHash();
     }
-    console.log(`Block mined: ${this.hash}`);
+    console.log(`⛏️ Block mined: ${this.hash}`);
   }
-
 }
 
 export default Block;
